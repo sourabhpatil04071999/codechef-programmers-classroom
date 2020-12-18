@@ -1,82 +1,81 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0px;
-}
-
-.nav {
+.mynav {
   height: 50px;
   width: 100%;
   background-color: #2f3246;
   position: relative;
 }
 
-.nav>.nav-header {
+.mynav>.mynav-header {
   display: inline;
 }
 
-.nav>.nav-header>.nav-title {
+.mynav>.mynav-header>.mynav-title {
   display: inline-block;
   font-size: 22px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   color: #fff;
   padding: 10px 10px 10px 10px;
 }
 
-.nav>.nav-btn {
+.mynav>.mynav-btn {
   display: none;
 }
 
-.nav>.nav-links {
+.mynav>.mynav-links {
   display: inline;
   float: right;
   font-size: 18px;
+  font-family: Georgia,
+    'Times New Roman',
+    Times,
+    serif;
+
+
 }
 
-.nav>.nav-links>a {
+.mynav>.mynav-links>a {
   display: inline-block;
   padding: 13px 10px 13px 10px;
   text-decoration: none;
   color: #efefef;
 }
 
-.nav>.nav-links>a:hover {
+.mynav>.mynav-links>a:hover {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.nav>#nav-check {
+.mynav>#mynav-check {
   display: none;
 }
 
 @media (max-width:600px) {
-  .nav>.nav-btn {
+  .mynav>.mynav-btn {
     display: inline-block;
     position: absolute;
     right: 0px;
     top: 0px;
   }
 
-  .nav>.nav-btn>label {
+  .mynav>.mynav-btn>label {
     display: inline-block;
     width: 50px;
     height: 50px;
     padding: 13px;
   }
 
-  .nav>.nav-btn>label:hover,
-  .nav #nav-check:checked~.nav-btn>label {
+  .mynav>.mynav-btn>label:hover,
+  .mynav #mynav-check:checked~.mynav-btn>label {
     background-color: rgba(0, 0, 0, 0.3);
   }
 
-  .nav>.nav-btn>label>span {
+  .mynav>.mynav-btn>label>span {
     display: block;
     width: 25px;
     height: 10px;
     border-top: 2px solid #eee;
   }
 
-  .nav>.nav-links {
+  .mynav>.mynav-links {
     position: absolute;
     display: block;
     width: 100%;
@@ -88,17 +87,36 @@ body {
     left: 0px;
   }
 
-  .nav>.nav-links>a {
+  .mynav>.mynav-links>a {
     display: block;
     width: 100%;
   }
 
-  .nav>#nav-check:not(:checked)~.nav-links {
+  .mynav>#mynav-check:not(:checked)~.mynav-links {
     height: 0px;
   }
 
-  .nav>#nav-check:checked~.nav-links {
+  .mynav>#mynav-check:checked~.mynav-links {
     height: calc(100vh - 50px);
     overflow-y: auto;
   }
+}
+
+.create-class{
+  margin-top: 5px;
+  width: 20%;
+}
+#createClass{
+  margin-bottom: 0px;
+}
+.create-class-effect {
+  text-align: center;
+  width: 100%;
+  border: 0;
+  padding: 1px;
+  border-bottom: 1px solid #ccc;
+  background-color: transparent;
+}
+#createClassSubmit{
+  width: 100%;
 }

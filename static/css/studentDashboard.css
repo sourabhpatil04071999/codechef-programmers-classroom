@@ -1,96 +1,143 @@
-* {
-    box-sizing: border-box;
+.mynav {
+  height: 50px;
+  width: 100%;
+  background-color: #2f4546;
+  position: relative;
+}
+
+.mynav>.mynav-header {
+  display: inline;
+}
+
+.mynav>.mynav-header>.mynav-title {
+  display: inline-block;
+  font-size: 22px;
+  font-family: Georgia,
+  'Times New Roman',
+  Times,
+  serif;
+
+
+  color: #fff;
+  padding: 10px 10px 10px 10px;
+}
+
+.mynav>.mynav-btn {
+  display: none;
+}
+
+.mynav>.mynav-links {
+  display: inline;
+  float: right;
+  font-size: 18px;
+  font-family: Georgia,
+  'Times New Roman',
+  Times,
+  serif;
+
+
+}
+
+.mynav>.mynav-links>a {
+  display: inline-block;
+  padding: 13px 10px 13px 10px;
+  text-decoration: none;
+  color: #efefef;
+}
+
+.mynav>.mynav-links>a:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.mynav>#mynav-check {
+  display: none;
+}
+
+@media (max-width:600px) {
+  .mynav>.mynav-btn {
+    display: inline-block;
+    position: absolute;
+    right: 0px;
+    top: 0px;
   }
-  
-  body {
-    margin: 0px;
-  }
-  
-  .nav {
+
+  .mynav>.mynav-btn>label {
+    display: inline-block;
+    width: 50px;
     height: 50px;
-    width: 100%;
-    background-color: #28504c;
-    position: relative;
+    padding: 13px;
   }
-  
-  .nav > .nav-header {
-    display: inline;
-  }
-  
-  .nav > .nav-header > .nav-title {
-    display: inline-block;
-    font-size: 22px;
-    color: #fff;
-    padding: 10px 10px 10px 10px;
-  }
-  
-  .nav > .nav-btn {
-    display: none;
-  }
-  
-  .nav > .nav-links {
-    display: inline;
-    float: right;
-    font-size: 18px;
-  }
-  
-  .nav > .nav-links > a {
-    display: inline-block;
-    padding: 13px 10px 13px 10px;
-    text-decoration: none;
-    color: #efefef;
-  }
-  
-  .nav > .nav-links > a:hover {
+
+  .mynav>.mynav-btn>label:hover,
+  .mynav #mynav-check:checked~.mynav-btn>label {
     background-color: rgba(0, 0, 0, 0.3);
   }
-  
-  .nav > #nav-check {
-    display: none;
+
+  .mynav>.mynav-btn>label>span {
+    display: block;
+    width: 25px;
+    height: 10px;
+    border-top: 2px solid #eee;
   }
-  
-  @media (max-width:600px) {
-    .nav > .nav-btn {
-      display: inline-block;
-      position: absolute;
-      right: 0px;
-      top: 0px;
-    }
-    .nav > .nav-btn > label {
-      display: inline-block;
-      width: 50px;
-      height: 50px;
-      padding: 13px;
-    }
-    .nav > .nav-btn > label:hover,.nav  #nav-check:checked ~ .nav-btn > label {
-      background-color: rgba(0, 0, 0, 0.3);
-    }
-    .nav > .nav-btn > label > span {
-      display: block;
-      width: 25px;
-      height: 10px;
-      border-top: 2px solid #eee;
-    }
-    .nav > .nav-links {
-      position: absolute;
-      display: block;
-      width: 100%;
-      background-color: rgb(47, 57, 63);
-      height: 0px;
-      transition: all 0.3s ease-in;
-      overflow-y: hidden;
-      top: 50px;
-      left: 0px;
-    }
-    .nav > .nav-links > a {
-      display: block;
-      width: 100%;
-    }
-    .nav > #nav-check:not(:checked) ~ .nav-links {
-      height: 0px;
-    }
-    .nav > #nav-check:checked ~ .nav-links {
-      height: calc(100vh - 50px);
-      overflow-y: auto;
-    }
+
+  .mynav>.mynav-links {
+    position: absolute;
+    display: block;
+    width: 100%;
+    background-color: rgb(29, 49, 53);
+    height: 0px;
+    transition: all 0.3s ease-in;
+    overflow-y: hidden;
+    top: 50px;
+    left: 0px;
   }
+
+  .mynav>.mynav-links>a {
+    display: block;
+    width: 100%;
+  }
+
+  .mynav>#mynav-check:not(:checked)~.mynav-links {
+    height: 0px;
+  }
+
+  .mynav>#mynav-check:checked~.mynav-links {
+    height: calc(100vh - 50px);
+    overflow-y: auto;
+  }
+}
+
+.effect-16~.focus-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #3399FF;
+  transition: 0.4s;
+}
+
+.effect-16:focus~.focus-border,
+.has-content.effect-16~.focus-border {
+  width: 100%;
+  transition: 0.4s;
+}
+
+.effect-16~label {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 9px;
+  color: #aaa;
+  transition: 0.3s;
+  z-index: -1;
+  letter-spacing: 0.5px;
+}
+
+.effect-16:focus~label,
+.has-content.effect-16~label {
+  top: -16px;
+  font-size: 12px;
+  color: #3399FF;
+  transition: 0.3s;
+}
