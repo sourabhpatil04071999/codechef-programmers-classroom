@@ -97,7 +97,17 @@
                     })
                     .then(function (docRef) {
                         console.log("Document written Successfully ");
-                        window.location.assign('/dashboard');
+                        if(type=='student'){
+                        window.location.assign('/studentDashboard');
+                        }
+                        else if(type=='teacher'){
+                        window.location.assign('/teacherDashboard');
+                        }
+                        else{
+                            firebase.auth().signOut();
+                            console.log("Some error occurred, Fill profile page...");
+                            window.location.assign('/auth');
+                        }
                     })
                     .catch(function (error) {
                         console.error("Error adding document: ", error);

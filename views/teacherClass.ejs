@@ -11,12 +11,10 @@
             integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="/static/css/teacherDashboard.css" />
 
-        <title>Dashboard</title>
+        <title>Classes</title>
     </head>
 
     <body>
-
-
         <div class="mynav">
             <input type="checkbox" id="mynav-check">
             <div class="mynav-header">
@@ -38,37 +36,20 @@
                 <a onclick="{userSignOut()}"> Sign out </a>
             </div>
         </div>
-
         <div class="container">
+            <!-- <h4>Joined Students</h4>
+            <div id="joinedStudents">
+                <button type="button" class="btn btn-primary" onclick="joinedStudents()">Show joined Students</button>
+            </div> -->
 
-            <div class="create-class">
-                <p id="createClass"></p>
-                <input class="create-class-effect" type="text" placeholder="Create class" onclick="{createClass()}" />
-                <button type="button" class="btn btn-primary" id="createClassSubmit"
-                    onclick="createClassSubmit()">Submit</button>
+            <div class="assign-code">
+                <p id="assignCode"></p>
+                <input class="assign-code-effect" type="text" placeholder="Enter Q code" onclick="{assignCode()}" />
+                <button type="button" class="btn btn-primary" id="assignCodeSubmit"
+                    onclick="assignCodeSubmit()">Submit</button>
             </div>
-            <br><br><br><br>
-            <div id="yourClasses">
-                <button type="button" class="btn btn-primary" onclick="yourClasses()">Show your classes</button>
-            </div>
-
-            
 
         </div>
-
-        <!-- Optional JavaScript; choose one of the two! -->
-
-        <!-- Option 1: Bootstrap Bundle with Popper -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
-        </script>
-
-        <!-- Option 2: Separate Popper and Bootstrap JS -->
-        <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
-    -->
-
 
         <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
@@ -84,7 +65,7 @@
 
             window.onload = function () {
                 checkLogIn();
-                document.getElementById("createClassSubmit").style.display = 'none';
+                document.getElementById("assignCodeSubmit").style.display = 'none';
             }
 
             var userInfo;
@@ -122,50 +103,56 @@
                 })
             }
 
-            function createClassSubmit() {
+            function assignCodeSubmit() {
                 var email = userInfo.email;
-                var code = document.getElementsByClassName("create-class-effect")[0].value;
-                console.log("ClassCode => " + code);
+                var quesCode = document.getElementsByClassName("assign-code-effect")[0].value;
+
+                var classCode = document.URL.split('/')[4];
+
+                console.log("Assignment Code => " + quesCode);
                 var db = firebase.firestore();
 
-                //CLASSES COLLECTION - helps to join the student
-                db.collection("classes").doc(code).set({
-                        email: email,
-                    })
-                    .then(function (docRef) {
-                        console.log("Class Created Successfully ");
-                    })
-                    .catch(function (error) {
-                        console.error("Error creating Class: ", error);
-                    });
-
-                //Teacher separate Classes collection  - helps to retrieve students info.
-                db.collection("users").doc(email).collection("classes").doc(code).set({
+                //Teacher separate Classes collection - helps to retrieve students info.
+                db.collection("users").doc(email).collection("classes").doc(classCode).collection("ques").doc(quesCode)
+                    .set({
                         'index': 0,
                     }, {
                         merge: true
                     })
                     .then(function (docRef) {
-                        console.log("Class Created Successfully ");
+                        console.log("Assigned Done Successfully ");
                     })
                     .catch(function (error) {
-                        console.error("Error creating Class: ", error);
+                        console.error("Error assing code: ", error);
                     });
 
             }
-            async function yourClasses() {
-                var email = userInfo.email;
-                var myClasses = document.getElementById('yourClasses');
-                await db.collection("users").doc(email).collection("classes").get().then(function (querySnapshot) {
-                    querySnapshot.forEach(function (doc) {
-                        // doc.data() is never undefined for query doc snapshots
-                        console.log(doc.id, " => ", doc.data());
-                        myClasses.innerHTML += `<h4> <a href='teacherClass/${doc.id}'>${doc.id}</a> </h4>`;
-                    });
-                });
+
+
+            async function joinedStudents() {
+                var code = document.URL.split('/')[4];
+                console.log(code);
+                let listDiv = document.getElementById('joinedStudents');
+                let studRef = db.collection("users").doc(userInfo.email).collection("classes").doc(code);
+                // await db.collection("users").doc(userInfo.email).collection("classes").doc(code).listCollections().then(
+                //     collections => {
+                //         for (let collection of collections) {
+                //             console.log(`Found subcollection with id: ${collection.id}`);
+                //             listDiv.innerHTML += `<p> ${collection.id} </p>`;
+
+                //         }
+                //     });
+
+                const studDoc = await studRef.get();
+                if (!studDoc.exists) {
+                    console.log('No such document!');
+                } else {
+                    let data = studDoc.data();
+                    console.log(data);
+                    console.log('Document data:', studDoc.data());
+                }
 
             }
-
 
             function userSignOut() {
                 firebase.auth().signOut().then(function () {
@@ -175,7 +162,6 @@
                 });
             }
         </script>
-
     </body>
 
 </html>

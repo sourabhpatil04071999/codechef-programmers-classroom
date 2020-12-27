@@ -47,6 +47,17 @@ app.get('/fillprofile', (req, res) => {
 app.get('/teacherDashboard', (req, res) => {
     res.render('teacherDashboard.ejs');
 });
+app.get('/teacherClass/:class', (req, res) => {
+    res.render('teacherClass.ejs');
+});
+app.get('/studentClass/:class', (req, res) => {
+    res.render('studentClass.ejs');
+});
+
+
+// app.get('/teacherDashboard', (req, res) => {
+//     res.render('teacherDashboard.ejs');
+// });
 
 app.get('/studentDashboard', (req, res) => {
     res.render('studentDashboard.ejs');

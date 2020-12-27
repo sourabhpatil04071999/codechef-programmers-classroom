@@ -102,14 +102,19 @@
   }
 }
 
-.create-class{
+.create-class,
+.assign-code {
   margin-top: 5px;
   width: 20%;
 }
-#createClass{
+
+#createClass,
+#assignCode {
   margin-bottom: 0px;
 }
-.create-class-effect {
+
+.create-class-effect,
+.assign-code-effect {
   text-align: center;
   width: 100%;
   border: 0;
@@ -117,6 +122,8 @@
   border-bottom: 1px solid #ccc;
   background-color: transparent;
 }
-#createClassSubmit{
+
+#createClassSubmit,
+#assignCodeSubmit {
   width: 100%;
 }
