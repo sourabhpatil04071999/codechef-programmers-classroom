@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/static/css/studentDashboard.css" />
+
+        <title>Profile</title>
+    </head>
+
+    <body>
+
+
+        <div class="mynav">
+            <input type="checkbox" id="mynav-check">
+            <div class="mynav-header">
+                <div class="mynav-title" id="helloUser">
+                    Hello
+                </div>
+            </div>
+            <div class="mynav-btn">
+                <label for="mynav-check">
+                    <span> </span>
+                    <span> </span>
+                    <span> </span>
+                </label>
+            </div>
+
+            <div class="mynav-links">
+                <a href="/studentDashboard"> Dashboard </a>
+                <a href="/studentProfile"> Profile </a>
+                <a onclick="{userSignOut()}"> Sign out </a>
+            </div>
+        </div>
+        <div class="container">
+
+            <div id="refreshQues">
+
+                <button type="button" class="btn btn-primary" value="Refresh" onclick="refreshQues()">Refresh</button>
+
+            </div>
+        </div>
+
+        <!-- Optional JavaScript; choose one of the two! -->
+
+        <!-- Option 1: Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
+        </script>
+
+        <!-- Option 2: Separate Popper and Bootstrap JS -->
+        <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    -->
+        <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
+        <script src="/static/js/firebase.js"></script>
+        <script src="/static/js/studentDashboard.js"></script>
+
+
+
+        <script>
+            firebase.initializeApp(firebaseConfig);
+            var userInfo = null;
+            var db = firebase.firestore();
+            var ccusername = "";
+
+            function checkLogIn() {
+
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        console.log(user);
+                        userInfo = user;
+                        console.log("User is Already LoggedIn");
+                        // window.location.assign('/dashboard');
+                        var helloUser = document.getElementById('helloUser');
+                        helloUser.innerHTML = "Hello " + userInfo.displayName.split(" ")[0];
+
+
+
+                        var docRef = db.collection("users").doc(user.email);
+                        docRef.get().then(function (doc) {
+                            if (doc.exists) {
+                                console.log("Document data:", doc.data());
+                                ccusername = doc.data().username;
+                                // document.getElementById('ccusername').value = doc.data().ccusername;
+                            } else {
+                                // doc.data() will be undefined in this case
+                                console.log("No such document!");
+                            }
+                        }).catch(function (error) {
+                            console.log("Error getting document:", error);
+                        });
+
+
+                    } else {
+                        console.log("User not LoggedIn");
+                        window.location.assign('/auth');
+
+                    }
+                })
+            }
+
+            window.onload = function () {
+                checkLogIn();
+            }
+
+
+
+            function userSignOut() {
+                firebase.auth().signOut().then(function () {
+                    console.log("User Signed Out");
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        </script>
+
+    </body>
+
+</html>

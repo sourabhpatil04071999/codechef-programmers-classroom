@@ -1,167 +1,204 @@
 <!doctype html>
 <html lang="en">
 
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="/static/css/teacherDashboard.css" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/teacherDashboard.css" />
 
-        <title>Classes</title>
-    </head>
+    <title>Classes</title>
+  </head>
 
-    <body>
-        <div class="mynav">
-            <input type="checkbox" id="mynav-check">
-            <div class="mynav-header">
-                <div class="mynav-title" id="helloUser">
-                    Hello
-                </div>
-            </div>
-            <div class="mynav-btn">
-                <label for="mynav-check">
-                    <span> </span>
-                    <span> </span>
-                    <span> </span>
-                </label>
-            </div>
-
-            <div class="mynav-links">
-                <a href="/teacherDashboard"> Dashboard </a>
-                <a href="/teacherProfile"> Profile </a>
-                <a onclick="{userSignOut()}"> Sign out </a>
-            </div>
+  <body>
+    <div class="mynav">
+      <input type="checkbox" id="mynav-check">
+      <div class="mynav-header">
+        <div class="mynav-title" id="helloUser">
+          Hello
         </div>
-        <div class="container">
-            <!-- <h4>Joined Students</h4>
+      </div>
+      <div class="mynav-btn">
+        <label for="mynav-check">
+          <span> </span>
+          <span> </span>
+          <span> </span>
+        </label>
+      </div>
+
+      <div class="mynav-links">
+        <a href="/teacherDashboard"> Dashboard </a>
+        <!-- <a href="/teacherProfile"> Profile </a> -->
+        <a onclick="{userSignOut()}"> Sign out </a>
+      </div>
+    </div>
+    <div class="container">
+      <!-- <h4>Joined Students</h4>
             <div id="joinedStudents">
                 <button type="button" class="btn btn-primary" onclick="joinedStudents()">Show joined Students</button>
             </div> -->
 
-            <div class="assign-code">
-                <p id="assignCode"></p>
-                <input class="assign-code-effect" type="text" placeholder="Enter Q code" onclick="{assignCode()}" />
-                <button type="button" class="btn btn-primary" id="assignCodeSubmit"
-                    onclick="assignCodeSubmit()">Submit</button>
-            </div>
+      <div class="assign-code">
+        <p id="assignCode"></p>
+        <input class="assign-code-effect" type="text" placeholder="Enter Q code" onclick="{assignCode()}" />
+        <button type="button" class="btn btn-primary" id="assignCodeSubmit" onclick="assignCodeSubmit()">Submit</button>
+      </div>
 
-        </div>
+      <h4>Questions Given</h4>
+      <div id="givenQuestions">
+        <button type="button" class="btn btn-primary" onclick="givenQuestions()">Show given questions</button>
+      </div>
+      <div id="givenQues">
+        <div class="row"></div>
+      </div>
 
-        <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
-        <script src="/static/js/firebase.js"></script>
-        <script src="/static/js/teacherDashboard.js"></script>
+    </div>
 
-
-        <script>
-            firebase.initializeApp(firebaseConfig);
-            var db = firebase.firestore();
-
-
-            window.onload = function () {
-                checkLogIn();
-                document.getElementById("assignCodeSubmit").style.display = 'none';
-            }
-
-            var userInfo;
-
-            function checkLogIn() {
-
-                firebase.auth().onAuthStateChanged((user) => {
-                    if (user) {
-                        console.log(user);
-                        userInfo = user;
-                        console.log("User is Already LoggedIn");
-                        // window.location.assign('/dashboard');
-                        var helloUser = document.getElementById('helloUser');
-                        helloUser.innerHTML = "Hello " + userInfo.displayName.split(" ")[0];
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
+    <script src="/static/js/firebase.js"></script>
+    <script src="/static/js/teacherDashboard.js"></script>
 
 
-                        var docRef = db.collection("users").doc(user.email);
-                        docRef.get().then(function (doc) {
-                            if (doc.exists) {
-                                console.log("Document data:", doc.data().type);
-                            } else {
-                                // doc.data() will be undefined in this case
-                                console.log("No such document!");
-                            }
-                        }).catch(function (error) {
-                            console.log("Error getting document:", error);
-                        });
+    <script>
+      firebase.initializeApp(firebaseConfig);
+      var db = firebase.firestore();
 
 
-                    } else {
-                        console.log("User not LoggedIn");
-                        window.location.assign('/auth');
+      window.onload = function () {
+        checkLogIn();
+        document.getElementById("assignCodeSubmit").style.display = 'none';
+      }
 
-                    }
-                })
-            }
+      var userInfo;
 
-            function assignCodeSubmit() {
-                var email = userInfo.email;
-                var quesCode = document.getElementsByClassName("assign-code-effect")[0].value;
+      function checkLogIn() {
 
-                var classCode = document.URL.split('/')[4];
-
-                console.log("Assignment Code => " + quesCode);
-                var db = firebase.firestore();
-
-                //Teacher separate Classes collection - helps to retrieve students info.
-                db.collection("users").doc(email).collection("classes").doc(classCode).collection("ques").doc(quesCode)
-                    .set({
-                        'index': 0,
-                    }, {
-                        merge: true
-                    })
-                    .then(function (docRef) {
-                        console.log("Assigned Done Successfully ");
-                    })
-                    .catch(function (error) {
-                        console.error("Error assing code: ", error);
-                    });
-
-            }
+        firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            console.log(user);
+            userInfo = user;
+            console.log("User is Already LoggedIn");
+            // window.location.assign('/dashboard');
+            var helloUser = document.getElementById('helloUser');
+            helloUser.innerHTML = "Hello " + userInfo.displayName.split(" ")[0];
 
 
-            async function joinedStudents() {
-                var code = document.URL.split('/')[4];
-                console.log(code);
-                let listDiv = document.getElementById('joinedStudents');
-                let studRef = db.collection("users").doc(userInfo.email).collection("classes").doc(code);
-                // await db.collection("users").doc(userInfo.email).collection("classes").doc(code).listCollections().then(
-                //     collections => {
-                //         for (let collection of collections) {
-                //             console.log(`Found subcollection with id: ${collection.id}`);
-                //             listDiv.innerHTML += `<p> ${collection.id} </p>`;
+            var docRef = db.collection("users").doc(user.email);
+            docRef.get().then(function (doc) {
+              if (doc.exists) {
+                console.log("Document data:", doc.data().type);
+              } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+              }
+            }).catch(function (error) {
+              console.log("Error getting document:", error);
+            });
 
-                //         }
-                //     });
 
-                const studDoc = await studRef.get();
-                if (!studDoc.exists) {
-                    console.log('No such document!');
-                } else {
-                    let data = studDoc.data();
-                    console.log(data);
-                    console.log('Document data:', studDoc.data());
-                }
+          } else {
+            console.log("User not LoggedIn");
+            window.location.assign('/auth');
 
-            }
+          }
+        })
+      }
 
-            function userSignOut() {
-                firebase.auth().signOut().then(function () {
-                    console.log("User Signed Out");
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            }
-        </script>
-    </body>
+      function assignCodeSubmit() {
+        var email = userInfo.email;
+        var quesCode = document.getElementsByClassName("assign-code-effect")[0].value;
+
+        var classCode = document.URL.split('/')[4];
+
+        console.log("Assignment Code => " + quesCode);
+        var db = firebase.firestore();
+
+        //Teacher separate Classes collection - helps to retrieve students info.
+        db.collection("users").doc(email).collection("classes").doc(classCode).collection("ques").doc(quesCode)
+          .set({
+            'index': 0,
+          }, {
+            merge: true
+          })
+          .then(function (docRef) {
+            console.log("Assigned Done Successfully ");
+          })
+          .catch(function (error) {
+            console.error("Error assing code: ", error);
+          });
+
+      }
+
+
+      async function joinedStudents() {
+        var code = document.URL.split('/')[4];
+        console.log(code);
+        let listDiv = document.getElementById('joinedStudents');
+        let studRef = db.collection("users").doc(userInfo.email).collection("classes").doc(code);
+        // await db.collection("users").doc(userInfo.email).collection("classes").doc(code).listCollections().then(
+        //     collections => {
+        //         for (let collection of collections) {
+        //             console.log(`Found subcollection with id: ${collection.id}`);
+        //             listDiv.innerHTML += `<p> ${collection.id} </p>`;
+
+        //         }
+        //     });
+
+        const studDoc = await studRef.get();
+        if (!studDoc.exists) {
+          console.log('No such document!');
+        } else {
+          let data = studDoc.data();
+          console.log(data);
+          console.log('Document data:', studDoc.data());
+        }
+
+      }
+
+
+      async function givenQuestions() {
+        var email = userInfo.email;
+        var classCode = document.URL.split('/')[4];
+        var row = document.getElementsByClassName('row')[0];
+        await
+        db.collection("users").doc(email).collection("classes").doc(classCode)
+          .collection("ques").get().then(function (
+            querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, " => ", doc.data());
+              row.innerHTML +=
+                `
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${doc.id}</h5>
+                                            <p class="card-text" id='${doc.id}'>
+                                            </p>
+                                            <a href='./${classCode}/${doc.id}/solved'
+                                                class="btn btn-primary">Look</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                `
+            });
+          });
+      }
+
+      function userSignOut() {
+        firebase.auth().signOut().then(function () {
+          console.log("User Signed Out");
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+    </script>
+  </body>
 
 </html>

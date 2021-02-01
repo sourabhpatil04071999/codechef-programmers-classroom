@@ -10,10 +10,14 @@
   "author": "Vansh",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/firestore": "^4.8.1",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.5",
     "cookie-parser": "^1.4.5",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
-    "firebase-admin": "^9.4.1"
+    "firebase-admin": "^9.4.1",
+    "request-promise": "^4.2.6"
   }
 }

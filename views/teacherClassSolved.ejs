@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/teacherDashboard.css" />
+
+    <title>Solved Students</title>
+  </head>
+
+  <body>
+    <div class="mynav">
+      <input type="checkbox" id="mynav-check">
+      <div class="mynav-header">
+        <div class="mynav-title" id="helloUser">
+          Hello
+        </div>
+      </div>
+      <div class="mynav-btn">
+        <label for="mynav-check">
+          <span> </span>
+          <span> </span>
+          <span> </span>
+        </label>
+      </div>
+
+      <div class="mynav-links">
+        <a href="/teacherDashboard"> Dashboard </a>
+        <!-- <a href="/teacherProfile"> Profile </a> -->
+        <a onclick="{userSignOut()}"> Sign out </a>
+      </div>
+    </div>
+    <div class="container">
+
+
+      <h4>List of students who solved this question</h4>
+      <div id="givenQuestions">
+        <button type="button" class="btn btn-primary" onclick="givenQuestions()">Fetch list</button>
+      </div>
+      <div>
+        <ul class="list-group" id="givenQuesSolved">
+
+        </ul>
+        <ul class="list-group" id="givenQuesNotSolved">
+
+        </ul>
+      </div>
+
+    </div>
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js "></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
+    <script src="/static/js/firebase.js"></script>
+    <script src="/static/js/teacherDashboard.js"></script>
+
+
+    <script>
+      firebase.initializeApp(firebaseConfig);
+      var db = firebase.firestore();
+
+
+      window.onload = function () {
+        checkLogIn();
+      }
+
+      var userInfo;
+
+      function checkLogIn() {
+
+        firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            console.log(user);
+            userInfo = user;
+            console.log("User is Already LoggedIn");
+            // window.location.assign('/dashboard');
+            var helloUser = document.getElementById('helloUser');
+            helloUser.innerHTML = "Hello " + userInfo.displayName.split(" ")[0];
+            var classCode = document.URL.split('/')[4];
+
+
+            var docRef = db.collection("users").doc(user.email);
+            docRef.get().then(function (doc) {
+              if (doc.exists) {
+                console.log("Document data:", doc.data().type);
+              } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+              }
+            }).catch(function (error) {
+              console.log("Error getting document:", error);
+            });
+
+
+          } else {
+            console.log("User not LoggedIn");
+            window.location.assign('/auth');
+
+          }
+        })
+      }
+
+      async function givenQuestions() {
+        var email = userInfo.email;
+        var classCode = document.URL.split('/')[4];
+        var queCode = document.URL.split('/')[5];
+
+        var givenQuesSolved = document.getElementById('givenQuesSolved');
+        var givenQuesNotSolved = document.getElementById('givenQuesNotSolved');
+
+        const solUsersRef = db.collection('users').doc(email).collection('classes').doc(classCode).collection(
+          'ques').doc(queCode).collection('solusers');
+        const snapshot = await solUsersRef.get();
+
+        snapshot.forEach(doc => {
+
+          solUsersRef.doc(doc.id).get().then(function (one) {
+            if (one.exists) {
+              console.log(one.data().status);
+              if (one.data().status === true) {
+                givenQuesSolved.innerHTML +=
+                  `
+                    <li class="list-group-item list-group-item-info">${doc.id}</li>
+                  `;
+              } else {
+                givenQuesNotSolved.innerHTML +=
+                  `
+                    <li class="list-group-item list-group-item-danger">${doc.id}</li>
+                  `;
+              }
+            } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+            givenQuesNotSolved.innerHTML +=
+            `
+              <li class="list-group-item list-group-item-danger">FOUND SOME ERROR</li>
+            `;
+            }
+          }).catch(function (error) {
+          console.log("Error getting document:", error);
+          givenQuesNotSolved.innerHTML +=
+          `
+          <li class="list-group-item list-group-item-danger">FOUND SOME ERROR</li>
+          `;
+          });
+
+
+        });
+
+      }
+
+
+      function userSignOut() {
+        firebase.auth().signOut().then(function () {
+          console.log("User Signed Out");
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+    </script>
+  </body>
+
+</html>

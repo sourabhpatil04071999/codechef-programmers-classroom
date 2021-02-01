@@ -34,7 +34,7 @@
 
             <div class="mynav-links">
                 <a href="/teacherDashboard"> Dashboard </a>
-                <a href="/teacherProfile"> Profile </a>
+                <!-- <a href="/teacherProfile"> Profile </a> -->
                 <a onclick="{userSignOut()}"> Sign out </a>
             </div>
         </div>
@@ -50,9 +50,11 @@
             <br><br><br><br>
             <div id="yourClasses">
                 <button type="button" class="btn btn-primary" onclick="yourClasses()">Show your classes</button>
+                <div class="row"></div>
+
             </div>
 
-            
+
 
         </div>
 
@@ -155,12 +157,25 @@
             }
             async function yourClasses() {
                 var email = userInfo.email;
-                var myClasses = document.getElementById('yourClasses');
+                var row = document.getElementsByClassName('row')[0];
                 await db.collection("users").doc(email).collection("classes").get().then(function (querySnapshot) {
                     querySnapshot.forEach(function (doc) {
                         // doc.data() is never undefined for query doc snapshots
                         console.log(doc.id, " => ", doc.data());
-                        myClasses.innerHTML += `<h4> <a href='teacherClass/${doc.id}'>${doc.id}</a> </h4>`;
+                        row.innerHTML +=
+                            `
+                             <div class="col">
+                                 <div class="card">
+                                     <div class="card-body">
+                                         <h5 class="card-title">${doc.id}</h5>
+                                         <p class="card-text" id='${doc.id}'>
+                                         </p>
+                                         <a href='teacherClass/${doc.id}' class="btn btn-primary">Go to
+                                             Class</a>
+                                     </div>
+                                 </div>
+                             </div>
+                            `;
                     });
                 });
 

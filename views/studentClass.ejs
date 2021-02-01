@@ -40,16 +40,22 @@
          <!-- <h4>Joined Students</h4>
           -->
          <h4>Questions to Solve</h4>
-            <div id="joinedStudents">
-               <button type="button" class="btn btn-primary" onclick="showQuestions()">Show questions</button>
-            </div>
+         <div id="joinedStudents">
+            <button type="button" class="btn btn-primary" onclick="showQuestions()">Show questions</button>
+         </div>
+         <br><br><br><br>
          <div id="quesToSolve">
-
+            <div class="row"></div>
          </div>
 
+         <br><br><br><br>
+
+         <!-- <div id="refreshQues">
+            <button type="button" class="btn btn-primary" onclick="refreshQues()">Refresh</button>
+         </div> -->
 
       </div>
-
+      <script src="http://code.jquery.com/jquery-1.8.3.min.js "></script>
       <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-firestore.js"></script>
@@ -107,7 +113,7 @@
          async function showQuestions() {
             var classCode = document.URL.split('/')[4];
             console.log(classCode, teacherEmail);
-            var quesToSolve = document.getElementById('quesToSolve');
+            var row = document.getElementsByClassName('row')[0];
             await
             db.collection("users").doc(teacherEmail).collection("classes").doc(classCode)
                .collection("ques").get().then(function (
@@ -115,38 +121,39 @@
                   querySnapshot.forEach(function (doc) {
                      // doc.data() is never undefined for query doc snapshots
                      console.log(doc.id, " => ", doc.data());
-                     quesToSolve.innerHTML +=
-                        `<h5> <a href='https://codechef.com/problems/${doc.id}' target='_blank'>${doc.id}</a> </h5>`;
+                     row.innerHTML +=
+                        `<div class="col">
+                           <div class="card">
+                              <div class="card-body">
+                                 <h5 class="card-title">${doc.id}</h5>
+                                 <p class="card-text" id='${doc.id}'>
+                                 </p>
+                                 <a href='https://codechef.com/problems/${doc.id}' target='_blank' class="btn btn-primary">Go to Question</a>
+                              </div>
+                           </div>
+                     </div>
+                     `;
                   });
                });
 
 
+            let info = {
+               'email': userInfo.email,
+               'classCode': classCode,
+               'teacherEmail': teacherEmail,
+            }
+
+
+            $.ajax({
+               url: `http://localhost:3000/studentClass/${classCode}`,
+               type: "POST",
+               data: {
+                  'info': info
+               },
+               dataType: "json"
+            });
          }
 
-         // async function joinedStudents() {
-         //     var code = document.URL.split('/')[4];
-         //     console.log(code);
-         //     let listDiv = document.getElementById('joinedStudents');
-         //     let studRef = db.collection("users").doc(userInfo.email).collection("classes").doc(code);
-         //     // await db.collection("users").doc(userInfo.email).collection("classes").doc(code).listCollections().then(
-         //     //     collections => {
-         //     //         for (let collection of collections) {
-         //     //             console.log(`Found subcollection with id: ${collection.id}`);
-         //     //             listDiv.innerHTML += `<p> ${collection.id} </p>`;
-
-         //     //         }
-         //     //     });
-
-         //     const studDoc = await studRef.get();
-         //     if (!studDoc.exists) {
-         //         console.log('No such document!');
-         //     } else {
-         //         let data = studDoc.data();
-         //         console.log(data);
-         //         console.log('Document data:', studDoc.data());
-         //     }
-
-         // }
 
          function userSignOut() {
             firebase.auth().signOut().then(function () {

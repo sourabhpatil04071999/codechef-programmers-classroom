@@ -39,7 +39,8 @@
                 <input class="form-check-input" type="radio" name="usertype" id="userType" value="student">
                 <label class="form-check-label" for="flexRadioDefault2">
                     Student
-                </label>
+                </label><br>Enter codechef username: 
+                <input type="text" name="username" placeholder="CC username" id="userName" />
             </div>
             <button type="submit" class="btn btn-primary" onclick={createUser()}>Sign in</button>
 
@@ -85,6 +86,8 @@
             function createUser() {
                 console.log(userInfo);
                 var type = document.querySelector('input[name="usertype"]:checked').value;
+                var ccusername = document.getElementById('userName').value;
+                console.log(ccusername);
                 console.log(type);
                 var email = userInfo.email;
                 var name = userInfo.displayName;
@@ -92,8 +95,9 @@
                 var db = firebase.firestore();
 
                 db.collection("users").doc(email).set({
-                        name: name,
-                        type: type
+                        name:name,
+                        type:type,
+                        ccusername
                     })
                     .then(function (docRef) {
                         console.log("Document written Successfully ");
