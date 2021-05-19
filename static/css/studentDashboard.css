@@ -4,10 +4,21 @@
   background-color: #2f4546;
   position: relative;
 }
+#helloUser
+{
+  color:chartreuse;
+  letter-spacing: 1px;
+}
+
 
 .mynav>.mynav-header {
   display: inline;
 }
+.helloUser{
+  color:chartreuse;
+  letter-spacing: 1px;
+}
+
 
 .mynav>.mynav-header>.mynav-title {
   display: inline-block;
@@ -95,6 +106,7 @@
   .mynav>.mynav-links>a {
     display: block;
     width: 100%;
+    color:white
   }
 
   .mynav>#mynav-check:not(:checked)~.mynav-links {
@@ -126,4 +138,8 @@
 
 #joinClassSubmit {
   width: 100%;
+  background-color:orangered;
+  border: 1px solid orangered;
+  color:white;
+  letter-spacing: 1px;
 }

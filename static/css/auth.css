@@ -3,9 +3,11 @@
 body {
 
     transition: all 0.3s ease-out;
-    font-family: "Times New Roman",
+    /* font-family: "Times New Roman",
         Times,
-        serif;
+        serif; */
+
+        /* font-family:"segeo UI"; */
     background-color: teal;
     position: absolute;
     top: 50%;
