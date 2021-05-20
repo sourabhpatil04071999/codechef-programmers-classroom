@@ -174,3 +174,15 @@ app.get('/', function (req, res) {
     res.redirect('/auth');
 });
 app.listen(process.env.port || 3000);
+
+
+
+
+
+
+
+
+
+
+
+
