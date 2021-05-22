@@ -4,8 +4,7 @@
   "description": "Learning",
   "main": "index.js",
 
-
-  "proxy":"https://arcane-ridge-49661.herokuapp.com/"  ,
+  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index"
