@@ -1,6 +1,6 @@
 var firebaseConfig = {
     apiKey: "AIzaSyCX7fqcw2UD0_4N-jfsiP7O4-XBtPXp9g8",
-    authDomain: "getmyuser.firebaseapp.com",
+    // authDomain: "getmyuser.firebaseapp.com",
     databaseURL: "https://getmyuser.firebaseio.com",
     projectId: "getmyuser",
     storageBucket: "getmyuser.appspot.com",
