@@ -1,3 +1,9 @@
+
+
+// nkvvx
+
+
+
 var firebaseConfig = {
     apiKey: "AIzaSyCX7fqcw2UD0_4N-jfsiP7O4-XBtPXp9g8",
     authDomain: "getmyuser.firebaseapp.com",
