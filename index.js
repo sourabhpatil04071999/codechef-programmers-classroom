@@ -2,7 +2,7 @@ const express = require('express')
 const app = express();
 var bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
-const port = 8000;
+const port = 3000;
 
 
 app.set('view engine', 'html');
