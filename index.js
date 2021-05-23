@@ -173,7 +173,7 @@ app.post('/studentClass/:class', (req, res) => {
 app.get('/', function (req, res) {
     res.redirect('/auth');
 });
-app.listen(process.env.PORT|| 3000);
+app.listen(process.env.port|| 3000);
 
 
 
